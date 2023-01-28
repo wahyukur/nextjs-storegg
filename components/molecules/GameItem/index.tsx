@@ -4,30 +4,31 @@ import Link from "next/link";
 interface GameItemProps {
     title: string;
     category: string;
-    thumbnail: 'Thumbnail-1' | 'Thumbnail-2' | 'Thumbnail-3' | 'Thumbnail-4' | 'Thumbnail-5';
+    thumbnail: string;
+    id: string;
 }
 
 export default function GameItem(props: GameItemProps) {
-    const {title, category, thumbnail} = props;
+    const {title, category, thumbnail, id} = props;
 
-  return (
-    <div className="featured-game-card position-relative">
-        <Link href={'/detail'}>
-            <div className="blur-sharp">
-                <Image src={`/img/${thumbnail}.png`} width={205} height={270} alt="" className="thumbnail" />
-            </div>
-            <div className="cover position-absolute bottom-0 m-32">
-                <div className="d-flex flex-column h-100 justify-content-between text-decoration-none">
-                    <div className="game-icon mx-auto">
-                        <Image src="/icon/console.svg" width={54} height={36} alt="console" />
-                    </div>
-                    <div>
-                        <p className="fw-semibold text-white text-xl m-0">{title}</p>
-                        <p className="fw-light text-white m-0">{category}</p>
+    return (
+        <div className="featured-game-card position-relative">
+            <Link href={`/detail/${id}`}>
+                <div className="blur-sharp">
+                    <Image src={thumbnail} width={205} height={270} alt="" className="thumbnail" />
+                </div>
+                <div className="cover position-absolute bottom-0 m-32">
+                    <div className="d-flex flex-column h-100 justify-content-between text-decoration-none">
+                        <div className="game-icon mx-auto">
+                            <Image src="/icon/console.svg" width={54} height={36} alt="console" />
+                        </div>
+                        <div>
+                            <p className="fw-semibold text-white text-xl m-0">{title}</p>
+                            <p className="fw-light text-white m-0">{category}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Link>
-    </div>
-  )
+            </Link>
+        </div>
+    )
 }
