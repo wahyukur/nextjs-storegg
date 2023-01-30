@@ -33,6 +33,7 @@
     border-radius: 1.625rem;
     padding: 1.875rem;
     cursor: pointer;
+    border: 2px solid transparent;
 }
 
 .detail input[type="radio"]:checked+.detail-card{
