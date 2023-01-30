@@ -5,6 +5,7 @@ import { getGameCategory } from "services/player";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
+import { CategoryTypes } from "services/data-types";
 
 export default function SignUpPhoto() {
     const [categories, setCategories] = useState([]);
@@ -30,12 +31,12 @@ export default function SignUpPhoto() {
 
     useEffect(() => {
         const getLocalForm = localStorage.getItem('user-form');
-        setLocalForm(JSON.parse(getLocalForm));
+        setLocalForm(JSON.parse(getLocalForm!));
     }, []);
 
     const onSubmit = async () => {
         const getLocalForm = await localStorage.getItem('user-form');
-        const form = JSON.parse(getLocalForm);
+        const form = JSON.parse(getLocalForm!);
         const data = new FormData();
 
         data.append('image', image);
@@ -49,7 +50,7 @@ export default function SignUpPhoto() {
         data.append('favorite', favorite);
 
         const result = await setSignUp(data);
-        if (result?.error === 1) {
+        if (result.error) {
             toast.error(result.message, {
                 theme: "colored"
             });
@@ -92,7 +93,7 @@ export default function SignUpPhoto() {
                                     value={favorite}
                                     onChange={(event) => setFavorite(event.target.value)}
                                 >
-                                    {categories.map(category => {
+                                    {categories.map((category: CategoryTypes) => {
                                         return <option key={category._id} value={category._id} selected>{category.name}</option>
                                     })}
                                 </select>

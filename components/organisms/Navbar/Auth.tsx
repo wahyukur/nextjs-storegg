@@ -1,11 +1,35 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import jwt_decode from 'jwt-decode';
 
 interface AuthProps {
     isLogin?: boolean;
 }
 
-export default function Auth(props: Partial<AuthProps>) {
-    const {isLogin} = props;
+export default function Auth() {
+    const [isLogin, setIsLogin] = useState(false);
+    const [user, setUser] = useState({
+        avatar: '',
+        email: '',
+        id: '',
+        name: '',
+        username: '',
+    });
+
+    useEffect(() => {
+        const token = Cookies.get('token');
+        if (token) {
+            const jwtToken = atob(token);
+            const payload = jwt_decode(jwtToken);
+            const user = payload.player;
+            const IMG = process.env.NEXT_PUBLIC_IMG;
+            user.avatar = `${IMG}/${user.avatar}`;
+            setIsLogin(true);
+            setUser(user)
+        }
+    }, []);
+    
 
     if (isLogin) {
         return (
@@ -13,7 +37,7 @@ export default function Auth(props: Partial<AuthProps>) {
                 <div className="vertical-line d-lg-block d-none"></div>
                 <div>
                     <a className="dropdown-toggle ms-lg-40" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="/img/avatar-1.png" className="rounded-circle" width="40" height="40" alt=""/>
+                        <img src={user.avatar} className="rounded-circle" width="40" height="40" alt=""/>
                     </a>
 
                     <ul className="dropdown-menu border-0" aria-labelledby="dropdownMenuLink">
