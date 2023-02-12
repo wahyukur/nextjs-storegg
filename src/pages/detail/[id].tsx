@@ -21,8 +21,9 @@ export default function Detail() {
 
     const getVoucherDetailAPI = useCallback(async (id: any) => {
         const data = await getDetailVoucher(id);
-        console.log(data);
+        
         setDataItem(data.detail);
+        localStorage.setItem('data-item', JSON.stringify(data.detail));
         setNominals(data.detail.nominals);
         setPayments(data.payment);
     }, [getDetailVoucher]);
@@ -36,6 +37,7 @@ export default function Detail() {
     return (
         <>
             <Navbar/>
+
             <section className="detail pt-lg-60 pb-50">
                 <div className="container-xxl container-fluid">
                     <div className="detail-header pb-50">
@@ -54,6 +56,7 @@ export default function Detail() {
                     </div>
                 </div>
             </section>
+
             <Footer/>
         </>
     )

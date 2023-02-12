@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import jwt_decode from 'jwt-decode';
-
-interface AuthProps {
-    isLogin?: boolean;
-}
+import jwtDecode from 'jwt-decode';
+import { JWTPayloadTypes, UserTypes } from "services/data-types";
+import { useRouter } from "next/router";
 
 export default function Auth() {
     const [isLogin, setIsLogin] = useState(false);
@@ -17,19 +15,26 @@ export default function Auth() {
         username: '',
     });
 
+    const router = useRouter();
+
     useEffect(() => {
         const token = Cookies.get('token');
         if (token) {
             const jwtToken = atob(token);
-            const payload = jwt_decode(jwtToken);
-            const user = payload.player;
+            const payload: JWTPayloadTypes = jwtDecode(jwtToken);
+            const userFromPayload: UserTypes = payload.player;
             const IMG = process.env.NEXT_PUBLIC_IMG;
-            user.avatar = `${IMG}/${user.avatar}`;
+            userFromPayload.avatar = `${IMG}/${userFromPayload.avatar}`;
             setIsLogin(true);
-            setUser(user)
+            setUser(userFromPayload);
         }
     }, []);
-    
+
+    const onLogout = () => {
+        Cookies.remove('token');
+        router.push('/');
+        setIsLogin(false);
+    };
 
     if (isLogin) {
         return (

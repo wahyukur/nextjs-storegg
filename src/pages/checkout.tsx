@@ -1,7 +1,9 @@
 import CheckoutConfirmation from "components/organisms/CheckoutConfirmation";
 import CheckoutDetail from "components/organisms/CheckoutDetail";
 import CheckoutItem from "components/organisms/CheckoutItem";
+import jwtDecode from "jwt-decode";
 import Image from "next/image";
+import { JWTPayloadTypes, UserTypes } from "services/data-types";
 
 export default function Checkout() {
   return (
@@ -24,4 +26,28 @@ export default function Checkout() {
         </div>
     </section>
   )
+}
+
+interface GetServerSideProps {
+    req: {
+        cookies: {
+            token: string;
+        }
+    }
+}
+  
+export async function getServerSideProps({ req }: GetServerSideProps) {
+    const { token } = req.cookies;
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/sign-in',
+                permanent: false,
+            },
+        };
+    }
+
+    return {
+        props: {},
+    };
 }
